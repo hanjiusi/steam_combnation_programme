@@ -1,0 +1,19 @@
+# ===== 不随仓库发布的本地内容 =====
+
+# 本地演示二进制（约 144MB：便携版 Node + Cloudflare 隧道程序）
+/tools/
+
+# 本地配置与密钥（含 Steam API Key 加密文件）
+/.env
+/data/private/
+
+# 运行时缓存与事件日志
+/data/cache/
+/data/events/
+
+# 编辑器/分享目录
+/.trae-html-share-packages/
+/.vscode/
+
+# Office 临时锁定文件
+~$*

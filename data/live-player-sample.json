@@ -1,0 +1,232 @@
+{
+  "steamid": "76561199861820476",
+  "displayName": "GALAMINDUSTRY",
+  "source": "steam_public_profile_xml",
+  "dataType": "partial_public_profile",
+  "fetchedAt": "2026-10-08T09:26:53.842Z",
+  "games": [
+    {
+      "appid": 558990,
+      "name": "Opus Magnum",
+      "playtime_forever": 20640,
+      "dataType": "public_profile_subset",
+      "tags": [
+        "Puzzle",
+        "Programming",
+        "Automation",
+        "Indie",
+        "Simulation",
+        "Logic",
+        "Singleplayer",
+        "Steampunk",
+        "Great Soundtrack",
+        "2D",
+        "Difficult",
+        "Building",
+        "Sandbox",
+        "Hex Grid",
+        "Casual",
+        "Atmospheric",
+        "Story Rich"
+      ],
+      "genres": [
+        "Simulation Games",
+        "Indie",
+        "Simulation"
+      ],
+      "source": "steam_store_tags",
+      "fetchedAt": "2026-10-08T09:26:54.564Z"
+    },
+    {
+      "appid": 881100,
+      "name": "Noita",
+      "playtime_forever": 12000,
+      "dataType": "public_profile_subset",
+      "tags": [
+        "Physics",
+        "Roguelike",
+        "Difficult",
+        "Pixel Graphics",
+        "Dungeon Crawler",
+        "Sandbox",
+        "Indie",
+        "Open World",
+        "2D",
+        "Perma Death",
+        "Action Roguelike",
+        "Action",
+        "Gun Customization",
+        "Roguelite",
+        "2D Platformer",
+        "RPG",
+        "Dark Humor",
+        "Mythology",
+        "Crafting",
+        "Action-Adventure"
+      ],
+      "genres": [
+        "Action Games",
+        "Action",
+        "Adventure",
+        "Indie",
+        "RPG",
+        "Simulation"
+      ],
+      "source": "steam_store_tags",
+      "fetchedAt": "2026-10-08T09:26:55.105Z"
+    },
+    {
+      "appid": 4194800,
+      "name": "Starvester",
+      "playtime_forever": 1860,
+      "dataType": "public_profile_subset",
+      "tags": [
+        "Incremental",
+        "Idler",
+        "Automation",
+        "Strategy",
+        "Resource Management",
+        "Casual",
+        "Mining",
+        "Simulation",
+        "Building",
+        "Economy",
+        "Management",
+        "Relaxing",
+        "Space",
+        "Sci-fi",
+        "2D",
+        "Colorful",
+        "Singleplayer",
+        "Atmospheric",
+        "Minimalist",
+        "Experimental"
+      ],
+      "genres": [
+        "Casual Games",
+        "Casual",
+        "Simulation",
+        "Strategy"
+      ],
+      "source": "steam_store_tags",
+      "fetchedAt": "2026-10-08T09:26:55.628Z"
+    },
+    {
+      "appid": 2849680,
+      "name": "Utopia Must Fall",
+      "playtime_forever": 618,
+      "dataType": "public_profile_subset",
+      "tags": [
+        "Early Access",
+        "Arcade",
+        "Casual",
+        "Roguelite",
+        "Tower Defense",
+        "Action Roguelike",
+        "Bullet Hell",
+        "Dark Comedy",
+        "Action",
+        "Shoot 'Em Up",
+        "Shooter",
+        "2D",
+        "Dark Humor",
+        "Funny",
+        "Procedural Generation",
+        "Abstract",
+        "Perma Death",
+        "Colorful",
+        "Tactical",
+        "Singleplayer"
+      ],
+      "genres": [
+        "Action Games",
+        "Action",
+        "Casual",
+        "Early Access"
+      ],
+      "source": "steam_store_tags",
+      "fetchedAt": "2026-10-08T09:26:56.265Z"
+    },
+    {
+      "appid": 1865060,
+      "name": "14 Minesweeper Variants",
+      "playtime_forever": 468,
+      "dataType": "public_profile_subset",
+      "tags": [
+        "Puzzle",
+        "Logic",
+        "Minimalist",
+        "Experimental",
+        "Casual",
+        "Difficult",
+        "Abstract",
+        "Procedural Generation",
+        "Indie",
+        "Strategy",
+        "Singleplayer",
+        "Psychological Horror"
+      ],
+      "genres": [
+        "Indie Games",
+        "Casual",
+        "Indie",
+        "Strategy"
+      ],
+      "source": "steam_store_tags",
+      "fetchedAt": "2026-10-08T09:26:56.778Z"
+    },
+    {
+      "appid": 975370,
+      "name": "Dwarf Fortress",
+      "playtime_forever": 264,
+      "dataType": "public_profile_subset",
+      "tags": [
+        "Dwarves",
+        "Colony Sim",
+        "Base Building",
+        "Simulation",
+        "Strategy",
+        "City Builder",
+        "Sandbox",
+        "Management",
+        "Building",
+        "Survival",
+        "Roguelike",
+        "Open World",
+        "Procedural Generation",
+        "Resource Management",
+        "Fantasy",
+        "Crafting",
+        "Economy",
+        "Moddable",
+        "Difficult",
+        "Exploration"
+      ],
+      "genres": [
+        "Simulation Games",
+        "Indie",
+        "Simulation",
+        "Strategy"
+      ],
+      "source": "steam_store_tags",
+      "fetchedAt": "2026-10-08T09:26:57.278Z"
+    }
+  ],
+  "warnings": [
+    {
+      "code": "partial_library",
+      "message": "当前仅读取公开主页展示的部分游戏与累计时长，不代表完整游戏库。配置服务端 Steam API key 后可查询公开游戏库。"
+    }
+  ],
+  "totalOwned": null,
+  "processed": 6,
+  "coverage": {
+    "taggedGames": 6,
+    "processedGames": 6,
+    "totalGames": null,
+    "gameRatio": null,
+    "playtimeRatio": null,
+    "totalMinutes": 35850,
+    "coveredMinutes": 35850
+  }
+}

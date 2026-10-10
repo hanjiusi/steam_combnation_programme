@@ -1,0 +1,45 @@
+{
+  "downloadedAt": "2026-10-08T13:00:38.074355+00:00",
+  "sourcePage": "https://cseweb.ucsd.edu/~jmcauley/datasets.html#steam_data",
+  "format": "Python dictionary literals in gzip; safe ast.literal_eval; historical snapshot, not current Steam population",
+  "sources": {
+    "users": {
+      "url": "https://mcauleylab.ucsd.edu/public_datasets/data/steam/australian_users_items.json.gz",
+      "localFile": "raw/australian_users_items.json.gz",
+      "bytes": 74035391,
+      "sha256": "0b329f79ddf450aba0aad923c8cb6d1affac0c98efaf70242d22fd10987a8d99"
+    },
+    "games": {
+      "url": "https://cseweb.ucsd.edu/~wckang/steam_games.json.gz",
+      "localFile": "raw/steam_games.json.gz",
+      "bytes": 2740516,
+      "sha256": "717f4653a26585fec8f463f59311a654127c2ed66b07b9f78b4c0ce64961c740"
+    }
+  },
+  "normalization": {
+    "userRecords": 88310,
+    "usersWithItems": 71504,
+    "behaviorRows": 5153209,
+    "invalidUsers": 0,
+    "invalidBehaviorRows": 0,
+    "gameRecords": 32135,
+    "validGameRecords": 32133,
+    "missingGameIds": 2,
+    "gamesWithoutTags": 162,
+    "parseErrors": 0,
+    "distinctUserIds": 87625,
+    "distinctBehaviorGames": 10978,
+    "deduplicatedCatalogGames": 32132,
+    "taggedCatalogGames": 31970,
+    "distinctTags": 339
+  },
+  "elapsedSeconds": 125.305,
+  "normalizedFiles": {
+    "behaviors.jsonl": {
+      "bytes": 312029096
+    },
+    "catalog.jsonl": {
+      "bytes": 3992188
+    }
+  }
+}

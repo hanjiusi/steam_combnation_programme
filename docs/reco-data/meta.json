@@ -1,0 +1,255 @@
+{
+  "generated_at": "2026-10-10T11:06:13",
+  "protocol": "同一批 40 用户、同一候选池(top-300)、同一 ALS 相关度; 等准确度门槛 = ρ × 该用户 ALS Top-10 的 RelDCG; 最优判据 = ρ=0.90 下 TAG-ILD 与 ALS-ILD 增益之和最大",
+  "rhos": [
+    0.85,
+    0.9,
+    0.95
+  ],
+  "rho_best": 0.9,
+  "best_w": {
+    "w": 0.75,
+    "criterion": "sum of gains at rho=0.9",
+    "gain_tag_ild": 0.13033803552389145,
+    "gain_als_ild": 0.1270694151520729,
+    "gain_sum": 0.2574074506759644
+  },
+  "n_users": 40,
+  "n_items": 6489,
+  "n_tags": 337,
+  "als_top10": {
+    "rdcg": 0.35984804106163465,
+    "als_ild": 0.8482075363397599,
+    "tag_ild": 0.7617588177323341,
+    "hit_ndcg": 0.0125
+  },
+  "modes": [
+    {
+      "key": "als",
+      "w": 0.0,
+      "label": "纯隐向量 w=0",
+      "frontier_total": 1476,
+      "knee": {
+        "rdcg": 0.3489659960634354,
+        "als_ild": 0.9805106908082962,
+        "tag_ild": 0.7998413160443306,
+        "hit_ndcg": 0.02863180033564775
+      },
+      "objective2": "(1-w)*ALS-ILD + w*TAG-ILD",
+      "rho": {
+        "rho0.85": {
+          "n_users": 40,
+          "gain_tag_ild": 0.0739538922905922,
+          "gain_als_ild": 0.1645758718252182
+        },
+        "rho0.90": {
+          "n_users": 40,
+          "gain_tag_ild": 0.0690007671713829,
+          "gain_als_ild": 0.15574794709682466
+        },
+        "rho0.95": {
+          "n_users": 40,
+          "gain_tag_ild": 0.052976572513580324,
+          "gain_als_ild": 0.1333177298307419
+        }
+      }
+    },
+    {
+      "key": "w025",
+      "w": 0.25,
+      "label": "混合 w=0.25",
+      "frontier_total": 1738,
+      "knee": {
+        "rdcg": 0.3489266676963965,
+        "als_ild": 0.9791867300868035,
+        "tag_ild": 0.8173431932926178,
+        "hit_ndcg": 0.021405179677700552
+      },
+      "objective2": "(1-w)*ALS-ILD + w*TAG-ILD",
+      "rho": {
+        "rho0.85": {
+          "n_users": 40,
+          "gain_tag_ild": 0.10492397397756577,
+          "gain_als_ild": 0.1616133153438568
+        },
+        "rho0.90": {
+          "n_users": 40,
+          "gain_tag_ild": 0.09523290395736694,
+          "gain_als_ild": 0.15378670990467072
+        },
+        "rho0.95": {
+          "n_users": 40,
+          "gain_tag_ild": 0.07455601245164871,
+          "gain_als_ild": 0.13208901435136794
+        }
+      }
+    },
+    {
+      "key": "hybrid",
+      "w": 0.5,
+      "label": "混合 w=0.50",
+      "frontier_total": 1896,
+      "knee": {
+        "rdcg": 0.3482259577631184,
+        "als_ild": 0.970230720937252,
+        "tag_ild": 0.8391425475478173,
+        "hit_ndcg": 0.0125
+      },
+      "objective2": "(1-w)*ALS-ILD + w*TAG-ILD",
+      "rho": {
+        "rho0.85": {
+          "n_users": 40,
+          "gain_tag_ild": 0.12274773716926575,
+          "gain_als_ild": 0.15353281795978546
+        },
+        "rho0.90": {
+          "n_users": 40,
+          "gain_tag_ild": 0.11143925487995147,
+          "gain_als_ild": 0.1456112802028656
+        },
+        "rho0.95": {
+          "n_users": 40,
+          "gain_tag_ild": 0.08844901472330094,
+          "gain_als_ild": 0.12425217479467392
+        }
+      }
+    },
+    {
+      "key": "w075",
+      "w": 0.75,
+      "label": "混合 w=0.75",
+      "frontier_total": 1953,
+      "knee": {
+        "rdcg": 0.34593337957502346,
+        "als_ild": 0.9519626095890998,
+        "tag_ild": 0.8590899243950844,
+        "hit_ndcg": 0.0125
+      },
+      "objective2": "(1-w)*ALS-ILD + w*TAG-ILD",
+      "rho": {
+        "rho0.85": {
+          "n_users": 40,
+          "gain_tag_ild": 0.14014285951852798,
+          "gain_als_ild": 0.13554270267486573
+        },
+        "rho0.90": {
+          "n_users": 40,
+          "gain_tag_ild": 0.13033803552389145,
+          "gain_als_ild": 0.1270694151520729
+        },
+        "rho0.95": {
+          "n_users": 40,
+          "gain_tag_ild": 0.10252617746591568,
+          "gain_als_ild": 0.10858969241380692
+        }
+      }
+    },
+    {
+      "key": "tag",
+      "w": 1.0,
+      "label": "纯标签 IDF w=1",
+      "frontier_total": 2582,
+      "knee": {
+        "rdcg": 0.34245543512924775,
+        "als_ild": 0.8670062839984893,
+        "tag_ild": 0.876452624797821,
+        "hit_ndcg": 0.0125
+      },
+      "objective2": "(1-w)*ALS-ILD + w*TAG-ILD",
+      "rho": {
+        "rho0.85": {
+          "n_users": 40,
+          "gain_tag_ild": 0.16123461127281188,
+          "gain_als_ild": 0.07764935940504074
+        },
+        "rho0.90": {
+          "n_users": 40,
+          "gain_tag_ild": 0.1427259236574173,
+          "gain_als_ild": 0.07675331979990005
+        },
+        "rho0.95": {
+          "n_users": 40,
+          "gain_tag_ild": 0.10801289081573487,
+          "gain_als_ild": 0.07376339584589005
+        }
+      }
+    }
+  ],
+  "cases": [
+    {
+      "key": "caseA_多样性提升最大",
+      "user": 83090,
+      "label": "多样性提升最大",
+      "test_item_app_id": 461430,
+      "test_item_in_knee_list": false
+    },
+    {
+      "key": "caseB_真实命中",
+      "user": 60852,
+      "label": "真实命中",
+      "test_item_app_id": 250900,
+      "test_item_in_knee_list": true
+    },
+    {
+      "key": "caseC_典型用户",
+      "user": 79603,
+      "label": "典型用户",
+      "test_item_app_id": 330840,
+      "test_item_in_knee_list": false
+    }
+  ],
+  "comparison": {
+    "nsga2_knee": {
+      "rdcg": 0.3486,
+      "ild": 0.982,
+      "hit_ndcg": 0.0222
+    },
+    "matched_compare": {
+      "0.3": {
+        "n_users_ild": 40,
+        "gain_ild": 0.008910752484798432,
+        "n_users_rdcg": 39,
+        "gain_rdcg": 0.014477083669262366,
+        "win_ild": 39
+      },
+      "0.5": {
+        "n_users_ild": 40,
+        "gain_ild": 0.006727578908920282,
+        "n_users_rdcg": 39,
+        "gain_rdcg": 0.004088181920541943,
+        "win_ild": 34
+      },
+      "0.7": {
+        "n_users_ild": 40,
+        "gain_ild": 0.008553016602516169,
+        "n_users_rdcg": 40,
+        "gain_rdcg": 0.0020008162958630275,
+        "win_ild": 32
+      }
+    }
+  },
+  "provenance": {
+    "nsga2_sim_als.json": "b281ab576348f627",
+    "nsga2_sim_w025.json": "5cc59d89989d9c4d",
+    "nsga2_sim_hybrid.json": "dda07cfadd60e33b",
+    "nsga2_sim_w075.json": "02dd5648bd1b5cbd",
+    "nsga2_sim_tag.json": "7d4712b57eff7972",
+    "sim_w_sweep.json": "ccc83627ddb66876",
+    "user_cases.json": "6978c288a48470d4",
+    "comparison.json": "6623fc653f8866a5",
+    "item_map.csv": "4c951da7953c2d75",
+    "user_map.csv": "bcbb385177664ee7",
+    "tag_meta.json": "3538e4cb203e2b1b",
+    "train_ui.npz": "3d577a86b92ab9e1",
+    "test_pairs.parquet": "377e2ef3e9cb8a62",
+    "als_user_factors.npy": "0bd0fb2490e628b0",
+    "als_item_factors.npy": "9517f484041055ec",
+    "tag_item_matrix.npy": "1602d374dffd1886"
+  },
+  "bds_dir": "D:\\trae\\bigdata_steam\\steam-rec",
+  "web_data": {
+    "items": "items.json",
+    "users": "users.json",
+    "reco": "reco/<user>.json"
+  }
+}

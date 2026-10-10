@@ -1,0 +1,23 @@
+{
+  "steamid": "demo",
+  "displayName": "演示玩家 · 合成游玩记录",
+  "source": "synthetic-demo",
+  "warnings": ["演示时长为人为构造，不代表任何真实玩家。游戏标签来自 Steam 商店公开页面。"],
+  "totalOwned": 12,
+  "processed": 12,
+  "coverage": 1,
+  "games": [
+    {"appid":646570,"name":"Slay the Spire","playtime_forever":14400},
+    {"appid":2379780,"name":"Balatro","playtime_forever":7800},
+    {"appid":1145360,"name":"Hades","playtime_forever":6000},
+    {"appid":588650,"name":"Dead Cells","playtime_forever":3600},
+    {"appid":367520,"name":"Hollow Knight","playtime_forever":2400},
+    {"appid":413150,"name":"Stardew Valley","playtime_forever":2700},
+    {"appid":105600,"name":"Terraria","playtime_forever":1800},
+    {"appid":289070,"name":"Sid Meier's Civilization VI","playtime_forever":5400},
+    {"appid":427520,"name":"Factorio","playtime_forever":1200},
+    {"appid":620,"name":"Portal 2","playtime_forever":720},
+    {"appid":730,"name":"Counter-Strike 2","playtime_forever":90},
+    {"appid":570,"name":"Dota 2","playtime_forever":0}
+  ]
+}

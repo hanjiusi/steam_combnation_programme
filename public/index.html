@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="lemonade">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f5f9e8"><meta name="description" content="在本机查看 Steam 游戏库、多标签偏好和游戏证据。">
+  <title>Steam Taste Atlas 游戏偏好画像</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/lemonade-components.css"><link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" type="module"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header wrap">
+    <nav class="header-nav" aria-label="页面导航"><a href="#profile-form" class="current">画像</a><a href="#games-title">游戏证据</a><a href="/reco.html">推荐演示</a><a href="/report.html">项目报告</a></nav>
+    <div class="header-meta"><span id="catalog-status">正在检查数据源</span></div>
+  </header>
+  <main class="wrap" id="main">
+    <section class="intro" aria-labelledby="intro-title">
+      <div class="intro-copy"><div><h1 id="intro-title">游戏偏好画像</h1></div></div>
+      <form id="profile-form" class="input-card card">
+        <div class="form-main"><div class="id-field"><label for="steam-input">Steam ID 或个人主页</label><div class="input-action"><input id="steam-input" class="input input-bordered" name="steamInput" type="text" autocomplete="off" spellcheck="false" placeholder="Steam ID64 或官方个人主页链接" value="76561199861820476" required><button class="btn btn-primary button primary" id="analyze-button" type="submit">更新画像</button></div></div>
+        <fieldset class="weight-controls"><legend>计算方式</legend><label><input class="radio radio-sm" type="radio" name="weightMode" value="balanced" checked><span>均衡</span><small>降低超长时长影响</small></label><label><input class="radio radio-sm" type="radio" name="weightMode" value="time"><span>按时长</span><small>突出时间投入</small></label></fieldset></div>
+        <div class="form-bottom"><div class="input-footer"><button type="button" class="btn btn-sm btn-ghost text-button" id="snapshot-button">查看本地快照</button><button type="button" class="btn btn-sm btn-ghost text-button" id="demo-button">合成示例</button><button type="button" class="btn btn-sm btn-ghost text-button muted" id="reset-button">清空</button></div></div>
+        <details id="api-config" class="api-config"><summary><span id="api-config-label">数据源设置</span><span aria-hidden="true">＋</span></summary><div class="api-config-content"><label for="api-key-input">Steam Web API Key</label><div class="api-key-row"><input class="input input-bordered" id="api-key-input" type="password" autocomplete="off" spellcheck="false" placeholder="服务端接口密钥"><button id="save-api-key" class="btn btn-secondary button secondary" type="button">连接</button></div><p id="api-config-message" class="input-help" aria-live="polite"><a href="https://steamcommunity.com/dev/apikey" target="_blank" rel="noopener noreferrer">Steam 官方申请页面</a></p></div></details>
+      </form>
+    </section>
+    <section class="status-panel" id="progress-panel" hidden role="status" aria-live="polite"><div class="progress-heading"><span class="spinner" aria-hidden="true"></span><strong id="progress-stage">准备数据</strong><span id="progress-count"></span></div><p id="progress-message">正在读取游戏记录…</p><div class="progress-track"><div id="progress-fill"></div></div></section>
+    <section class="error-panel alert" id="error-panel" hidden role="alert"><span aria-hidden="true">!</span><div><strong id="error-title">暂时无法生成画像</strong><p id="error-message"></p></div></section>
+    <section id="empty-state" class="empty-state"><div><span class="badge badge-secondary">开始查看</span><h2>从你的游戏库，找到共同标签。</h2><p>点击“更新画像”读取最新记录，或打开本机已保存的快照。</p></div><div class="empty-steps"><span><b>01</b>游戏与时长</span><span><b>02</b>多标签贡献</span><span><b>03</b>偏好与证据</span></div></section>
+    <div id="dashboard" hidden>
+      <section class="profile-heading"><div><h2 id="player-name">玩家画像</h2><p id="player-source"></p></div><div class="profile-actions"><span id="demo-badge" class="demo-badge badge badge-warning" hidden>合成示例 非真实账号</span><button class="btn btn-outline button secondary" id="export-json" type="button">导出数据</button><button class="btn btn-outline button secondary" id="export-svg" type="button">保存图谱</button></div></section>
+      <section class="scope-banner" id="scope-banner" hidden aria-labelledby="scope-title"><strong id="scope-title"></strong><p id="scope-message"></p></section><div class="notice" id="warnings" hidden role="status"></div>
+      <section class="metrics stats" aria-label="数据概览"><article class="stat"><span>可见游戏库</span><strong id="metric-owned">—</strong><small id="owned-detail">拥有的游戏</small></article><article class="stat"><span id="played-label">玩过的游戏</span><strong id="metric-played">—</strong><small id="played-detail">有游玩记录</small></article><article class="stat"><span id="hours-label">累计游玩</span><strong id="metric-hours">—</strong><small>小时</small></article></section>
+      <section class="panel graph-panel card" aria-labelledby="graph-title"><div class="section-heading"><div><h2 id="graph-title">偏好标签图谱</h2></div><div class="graph-key"><span><i class="key-dot"></i>偏好强度</span><span><i class="key-line"></i>共现关系</span></div></div><div class="graph-layout"><div class="graph-main"><div id="graph-container" class="graph-container"><svg id="taste-graph" viewBox="0 0 880 510" role="group" aria-label="用户偏好标签关联图，使用 Tab 选择标签查看证据"></svg></div><div id="graph-legend" class="graph-legend" aria-label="标签维度"></div></div><aside class="evidence-panel" aria-labelledby="evidence-title"><p class="eyebrow">游戏证据</p><div id="evidence-content"><h3 id="evidence-title">选择一个标签</h3><p class="evidence-empty">点击节点，查看贡献来自哪些游戏。</p></div></aside></div></section>
+      <div class="analysis-grid"><section class="panel ranking-panel card" aria-labelledby="ranking-title"><div class="section-heading compact"><div><h2 id="ranking-title">标签强度</h2></div></div><div class="filter-tabs" id="dimension-filters" role="group" aria-label="按标签维度筛选"></div><div class="tag-ranking" id="tag-ranking"></div></section><section class="panel dimension-panel card" aria-labelledby="dimension-title"><div class="section-heading compact"><div><h2 id="dimension-title">偏好的不同侧面</h2></div></div><div id="dimension-chart" class="dimension-chart"></div></section></div>
+      <section id="population-panel" class="panel population-panel card" aria-labelledby="population-title" hidden><div class="section-heading compact"><div><h2 id="population-title">历史样本对照</h2><p id="population-count"></p></div><div class="population-key"><span><i class="population-current"></i>画像占比</span><span><i class="population-historical"></i>历史样本平均占比</span></div></div><div id="population-chart" class="population-chart"></div></section>
+      <section class="panel playtime-panel card" aria-labelledby="playtime-title"><div class="section-heading compact"><h2 id="playtime-title">游玩时长</h2></div><div id="playtime-chart" class="playtime-chart"></div><button id="more-playtime" class="btn btn-ghost text-button more-button" type="button" hidden>展开全部</button></section>
+      <section class="panel games-panel card" aria-labelledby="games-title"><div class="section-heading compact"><div><h2 id="games-title">游戏记录</h2><p id="games-caption">查看累计时长与原始标签。</p></div><label class="sort-label" for="games-sort">排序 <select class="select select-sm" id="games-sort"><option value="hours">游玩时长</option><option value="name">游戏名称</option><option value="tags">标签数量</option></select></label></div><div class="table-scroll"><table class="table"><thead><tr><th scope="col">游戏</th><th scope="col">游玩时长</th><th scope="col">原始标签</th></tr></thead><tbody id="games-body"></tbody></table></div><button class="btn btn-ghost text-button more-button" id="more-games" type="button" hidden>显示更多游戏</button></section>
+      <section class="method-panel"><h2>画像的含义</h2><details><summary>计算说明与数据来源</summary><div id="method-details"></div></details></section>
+    </div>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

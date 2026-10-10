@@ -1,0 +1,147 @@
+{
+  "verifiedAt": "2026-10-08T13:23:23.682702+00:00",
+  "hdfs": {
+    "distribution": "Apache Hadoop 3.4.2",
+    "mode": "Single-host pseudo-distributed NameNode + DataNode in WSL2 Ubuntu",
+    "replication": 1,
+    "endpoint": "hdfs://127.0.0.1:19000",
+    "localOnly": true,
+    "fsckHealthy": true,
+    "countOutput": "70           79          263741708 /steamtaste/public-steam",
+    "tableBytesOutput": "21587527   21587527   /steamtaste/public-steam/behaviors.parquet\n949270     949270     /steamtaste/public-steam/catalog.parquet\n61545      61545      /steamtaste/public-steam/population-baseline.parquet\n240719221  240719221  /steamtaste/public-steam/profiles.parquet\n424145     424145     /steamtaste/public-steam/tag-pairs.parquet",
+    "sampleSha256Roundtrip": "750cfc969a19308da06abe3d58d23b7cc2f736976001364eed15cdb46bf081e7",
+    "sourceArchive": "https://dlcdn.apache.org/hadoop/common/hadoop-3.4.2/hadoop-3.4.2.tar.gz",
+    "sha512OfficialVerified": true
+  },
+  "warehouse": {
+    "queryEngine": "Apache Spark 3.5.5",
+    "catalogImplementation": "Hive",
+    "metastore": "Embedded Apache Hive 2.3.9 / Apache Derby, persisted on local disk",
+    "standaloneHiveServer2": false,
+    "tables": {
+      "behaviors": "hdfs://127.0.0.1:19000/steamtaste/public-steam/behaviors.parquet",
+      "profiles": "hdfs://127.0.0.1:19000/steamtaste/public-steam/profiles.parquet",
+      "catalog": "hdfs://127.0.0.1:19000/steamtaste/public-steam/catalog.parquet",
+      "population_baseline": "hdfs://127.0.0.1:19000/steamtaste/public-steam/population-baseline.parquet",
+      "tag_pairs": "hdfs://127.0.0.1:19000/steamtaste/public-steam/tag-pairs.parquet"
+    },
+    "persistedTablesAfterRestart": [
+      "behaviors",
+      "catalog",
+      "population_baseline",
+      "profiles",
+      "tag_pairs"
+    ],
+    "queries": {
+      "behaviors": "SELECT COUNT(*) AS rows, COUNT(DISTINCT steamid) AS users, SUM(minutes) AS minutes FROM steamtaste.behaviors",
+      "profiles": "SELECT COUNT(*) AS rows, COUNT(DISTINCT steamid) AS users FROM steamtaste.profiles",
+      "catalog": "SELECT COUNT(*) AS rows FROM steamtaste.catalog",
+      "population": "SELECT COUNT(*) AS rows FROM steamtaste.population_baseline",
+      "pairs": "SELECT COUNT(*) AS rows FROM steamtaste.tag_pairs",
+      "shareInvariant": "SELECT MAX(ABS(totalShare - 1.0)) AS maxError FROM (SELECT steamid, SUM(share) AS totalShare FROM steamtaste.profiles GROUP BY steamid)",
+      "topPopulationTags": "SELECT tag, usersWithTag, meanShareAllBehaviorUsers FROM steamtaste.population_baseline ORDER BY meanShareAllBehaviorUsers DESC LIMIT 10"
+    },
+    "results": {
+      "behaviors": [
+        {
+          "rows": 5094082,
+          "users": 70912,
+          "minutes": 5045724159
+        }
+      ],
+      "profiles": [
+        {
+          "rows": 8192822,
+          "users": 67894
+        }
+      ],
+      "catalog": [
+        {
+          "rows": 32132
+        }
+      ],
+      "population": [
+        {
+          "rows": 337
+        }
+      ],
+      "pairs": [
+        {
+          "rows": 28230
+        }
+      ],
+      "shareInvariant": [
+        {
+          "maxError": 2.220446049250313e-15
+        }
+      ],
+      "topPopulationTags": [
+        {
+          "tag": "Multiplayer",
+          "usersWithTag": 67528,
+          "meanShareAllBehaviorUsers": 0.03391242077075187
+        },
+        {
+          "tag": "Co-op",
+          "usersWithTag": 66982,
+          "meanShareAllBehaviorUsers": 0.03297835352732731
+        },
+        {
+          "tag": "FPS",
+          "usersWithTag": 66142,
+          "meanShareAllBehaviorUsers": 0.027530885228051534
+        },
+        {
+          "tag": "Singleplayer",
+          "usersWithTag": 66784,
+          "meanShareAllBehaviorUsers": 0.026948760641870923
+        },
+        {
+          "tag": "Shooter",
+          "usersWithTag": 66065,
+          "meanShareAllBehaviorUsers": 0.02675224029415761
+        },
+        {
+          "tag": "First-Person",
+          "usersWithTag": 65893,
+          "meanShareAllBehaviorUsers": 0.025134997961890376
+        },
+        {
+          "tag": "Online Co-Op",
+          "usersWithTag": 65241,
+          "meanShareAllBehaviorUsers": 0.02485653626610878
+        },
+        {
+          "tag": "Action",
+          "usersWithTag": 67721,
+          "meanShareAllBehaviorUsers": 0.020203505802446096
+        },
+        {
+          "tag": "Open World",
+          "usersWithTag": 63178,
+          "meanShareAllBehaviorUsers": 0.019349971470923013
+        },
+        {
+          "tag": "Moddable",
+          "usersWithTag": 61812,
+          "meanShareAllBehaviorUsers": 0.01885280944511387
+        }
+      ]
+    },
+    "seconds": {
+      "behaviors": 6.068,
+      "profiles": 4.074,
+      "catalog": 0.242,
+      "population": 0.572,
+      "pairs": 0.242,
+      "shareInvariant": 5.159,
+      "topPopulationTags": 0.768
+    }
+  },
+  "elapsedSeconds": 40.549,
+  "limitations": [
+    "Single machine, replication 1; not a multi-node cluster or durability claim.",
+    "SQL executes in Spark using embedded Hive metastore, not standalone HiveServer2.",
+    "Historical downloaded data, no synthetic expansion."
+  ]
+}

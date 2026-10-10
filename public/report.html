@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>项目报告 · Steam 推荐系统 × 用户标签画像 协同工程</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23b7ca40'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%234c7c24'/%3E%3C/svg%3E">
+<style>
+:root{--ink:#293820;--muted:#667052;--line:#d1d7bd;--green:#568129;--mint:#4c7c24;--deep:#35491e;--gold:#c2aa20;--paper:#fffffa;--soft:#f0f5e4;--bg:#f5f9e8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.8 "Microsoft YaHei","Segoe UI","PingFang SC",sans-serif}
+a{color:var(--mint)}
+.site-header{display:flex;align-items:center;gap:32px;height:72px;max-width:1180px;margin:0 auto;border-bottom:1px solid var(--line);padding:0 10px}
+.header-nav{display:flex;gap:26px;height:100%;align-items:center;font-size:13.5px}
+.header-nav a{text-decoration:none;color:var(--muted);display:flex;align-items:center;height:100%;position:relative}
+.header-nav a.current{color:var(--ink);font-weight:650}
+.header-nav a.current:after{content:"";position:absolute;height:3px;background:var(--mint);bottom:0;width:100%}
+.header-meta{margin-left:auto;font-size:12px;color:var(--muted);white-space:nowrap}
+main{max-width:1180px;margin:26px auto 48px;background:var(--paper);border-top:7px solid var(--green);padding:40px 52px 30px}
+.hero{border-bottom:1px solid var(--line);padding-bottom:22px}
+.eyebrow{font:650 12px/1.5 ui-monospace,Consolas,monospace;letter-spacing:.6px;color:var(--mint);margin:0 0 8px}
+h1{font-size:31px;line-height:1.45;margin:0 0 12px}
+.lede{font-size:15px;margin:0 0 10px}
+.meta{font-size:12.5px;color:var(--muted);margin:0}
+h2{font-size:22px;border-top:1px solid var(--line);padding-top:22px;margin:44px 0 10px}
+h2 .no{color:var(--mint);font-family:ui-monospace,Consolas,monospace;font-size:15px;margin-right:9px}
+h3{font-size:16.5px;margin:26px 0 6px}
+p{margin:10px 0}
+ul,ol{padding-left:22px;margin:10px 0}
+li{margin-bottom:6px}
+.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:22px 0 6px}
+.card{border:1px solid var(--line);border-radius:12px;background:var(--soft);padding:14px 14px 12px}
+.card strong{display:block;font:600 20px/1.4 ui-monospace,Consolas,monospace;color:#416426;letter-spacing:-.5px}
+.card span{font-size:12px;color:var(--muted);line-height:1.5;display:block;margin-top:3px}
+.panel{border:1px solid var(--line);border-radius:12px;background:var(--soft);padding:15px 18px;margin:14px 0}
+.panel h4{margin:0 0 8px;font-size:14.5px;color:#416426}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.grid2>.panel,.grid3>.panel{margin:0}
+.kv{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.kv>div{border:1px solid var(--line);border-radius:10px;background:var(--soft);padding:11px 13px}
+.kv b{display:block;font:600 17px/1.5 ui-monospace,Consolas,monospace;color:#416426}
+.kv span{font-size:12px;color:var(--muted);display:block;line-height:1.5}
+.table-wrap{overflow-x:auto;margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+td,th{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#edf3df;font-weight:650;white-space:nowrap}
+td.num,.mono{font-family:ui-monospace,Consolas,monospace;font-size:12.5px;white-space:nowrap}
+tr.base td{background:#f7f9ee;color:#555f43}
+code{font:12.5px ui-monospace,Consolas,monospace;background:var(--soft);padding:2px 5px;border-radius:5px}
+pre{background:var(--soft);border:1px solid var(--line);padding:14px 16px;border-radius:10px;font:12px/1.7 ui-monospace,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;margin:12px 0}
+figure{margin:18px 0}
+figure svg{width:100%;height:auto;display:block}
+figcaption{color:var(--muted);font-size:12.5px;margin-top:8px;line-height:1.7}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:stretch;margin:14px 0}
+.flow .step{flex:1 1 148px;border:1px solid var(--line);border-radius:10px;background:var(--soft);padding:10px 12px;font-size:12.5px;line-height:1.65}
+.flow .step b{display:block;font-size:13px;color:#416426;margin-bottom:2px}
+.flow .arr{display:grid;place-items:center;color:var(--muted);font-size:15px;padding:0 2px}
+.note{font-size:12.5px;color:var(--muted);margin:8px 0 0}
+.foot{border-top:1px solid var(--line);margin-top:44px;padding-top:16px;font-size:12.5px;color:var(--muted);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.foot a{text-decoration:none}
+.foot a:hover{text-decoration:underline}
+@media(max-width:1020px){.cards{grid-template-columns:repeat(3,1fr)}.grid2,.grid3{grid-template-columns:1fr}.kv{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){main{margin:0;padding:26px 20px}.site-header{gap:16px;padding:0 16px;margin:0}.header-meta{display:none}.cards{grid-template-columns:1fr 1fr}h1{font-size:25px}.flow .arr{display:none}}
+@media print{body{background:#fff}main{margin:0;box-shadow:none;border-top-width:5px;max-width:none;padding:0 6mm}.cards,.card{break-inside:avoid}h2{break-after:avoid}tr,figure,.panel,.kv>div{break-inside:avoid}.site-header{padding:0}.header-nav,.header-meta{display:none}pre{white-space:pre-wrap}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <nav class="header-nav" aria-label="页面导航">
+    <a href="/">画像</a><a href="/#games-title">游戏证据</a><a href="/reco.html">推荐演示</a><a href="/report.html" class="current">项目报告</a>
+  </nav>
+  <div class="header-meta">协同版报告 · 自包含离线页（无脚本、可打印为 PDF）</div>
+</header>
+<main>
+  <div class="hero">
+    <p class="eyebrow">华中科技大学 · 大数据导论 · 课程设计 · 协同工程报告</p>
+    <h1>Steam 推荐系统 × 用户标签画像<br>协同工程报告</h1>
+    <p class="lede">把「标签画像（解释层）」接进「多目标推荐（决策层）」：同一批 40 个演示用户、同一候选池、同一指标口径，验证「多样性感知重排序」是否可行。群体结论：多样性 <b>+15.8%</b>、准确度仅 <b>−3.1%</b>，权重平台区 <b>[0.5, 0.75]</b>，推荐等权取值 <b>w = 0.5</b>。</p>
+    <p class="meta">生成于 2026 年 10 月 · 数据快照：画像侧 2026-10-08 / 实验结果 2026-10-10 · 三个本地工程：SteamTasteAtlas（STA）× bigdata_steam（BDS）× combination（融合演示站）· 源项目零改动</p>
+  </div>
+
+  <div class="cards">
+    <div class="card"><strong>112,707</strong><span>用户池 · 建模矩阵规模（密度 0.100%）</span></div>
+    <div class="card"><strong>6,489</strong><span>候选游戏 · 标签覆盖 100%</span></div>
+    <div class="card"><strong>731,205</strong><span>条真实交互（779.3 万条评论清洗而来）</span></div>
+    <div class="card"><strong>8,192,822</strong><span>行画像明细（67,894 位历史用户）</span></div>
+    <div class="card"><strong>+15.8%</strong><span>多样性 ALS-ILD@10（膝点 vs 纯 ALS 基线）</span></div>
+    <div class="card"><strong>−3.1%</strong><span>准确度 RelDCG@10（全部代价）</span></div>
+  </div>
+
+  <!-- ===================== 01 工程总览 ===================== -->
+  <h2 id="overview"><span class="no">01</span>工程总览：三个仓库，一次协同</h2>
+  <p>本工程由三个本地仓库协同完成：<b>画像侧（STA）</b>产出标签 IDF 画像与知识库，同时充当推荐结果的「解释层」与演示站的 Web 基座；<b>推荐侧（BDS）</b>用 NSGA-II 在「猜得准 × 推得广」两个目标上求整条帕累托前沿；<b>融合侧（combination）</b>用同一口径把两端复算、校验并做成离线可跑的演示站与本报告。两源项目保持 <b>零改动</b>，融合侧独立可运行。</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>仓库</th><th>路径</th><th>角色</th><th>关键产出</th></tr></thead>
+      <tbody>
+        <tr><td>SteamTasteAtlas（STA）</td><td class="mono">D:\trae\SteamTasteAtlas</td><td>解释层：标签画像 + 知识库 + Web 基座</td><td>337 维 IDF 标签向量、31,970 款带标签元数据、画像页与流式更新链路</td></tr>
+        <tr><td>bigdata_steam（BDS）</td><td class="mono">D:\trae\bigdata_steam\steam-rec</td><td>决策层：NSGA-II 多目标推荐实验</td><td>5 种相似度模式的帕累托前沿、膝点、对照实验与三案例</td></tr>
+        <tr><td>combination（融合侧）</td><td class="mono">D:\trae\combination</td><td>融合层：复算校验 + 离线演示站</td><td>web-data 快照（40 用户 × 5 模式）、三页站点、本报告</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>协同接口（数据在哪里交接）</h3>
+  <div class="grid3">
+    <div class="panel"><h4>① STA → BDS：标签矩阵</h4>画像侧一次产出的「标签-游戏矩阵」（6,489 × 337，行 L2 归一），成为推荐侧第二目标 TAG-ILD 的直接来源；6489 款候选对知识库 100% 命中，平均 10.8 标签 / 款。</div>
+    <div class="panel"><h4>② BDS → combination：实验产物</h4>5 份逐用户前沿与膝点（nsga2_sim_*.json）、权重扫描（sim_w_sweep.json）、三案例（user_cases.json）、对照实验（comparison.json）——共 16 项快照，全部带 SHA256 记录。</div>
+    <div class="panel"><h4>③ combination → 前端：web-data</h4>复算生成 meta / users / items 与逐用户推荐文件（reco/&lt;uid&gt;.json ×40），驱动画像页、推荐演示页与本报告，页面数字与源实验逐位一致。</div>
+  </div>
+
+  <h3>端到端数据流</h3>
+  <div class="flow">
+    <div class="step"><b>① 数据采集</b>UCSD 公开历史数据集（画像侧）· 全量评论行为集（推荐侧）· 当前账号 Steam 公开接口</div>
+    <div class="arr">→</div>
+    <div class="step"><b>② 清洗与规范化</b>gzip→JSONL 安全解析；评论 6 步清洗；标签频率与二标签共现统计</div>
+    <div class="arr">→</div>
+    <div class="step"><b>③ 存储与数仓</b>HDFS + Parquet 五表 + Hive 元数据（画像）；建模矩阵 112,707 × 6,489（推荐）</div>
+    <div class="arr">→</div>
+    <div class="step"><b>④ 计算与优化</b>Spark SQL 批量画像 / Flink+Redis 增量链路；ALS 隐向量 + NSGA-II 演化</div>
+    <div class="arr">→</div>
+    <div class="step"><b>⑤ 融合复算</b>build_reco_data.py 三重校验生成 web-data 快照</div>
+    <div class="arr">→</div>
+    <div class="step"><b>⑥ 展示与复现</b>画像页 / 推荐演示页 / 本报告——本机一键启动、完全离线</div>
+  </div>
+
+  <!-- ===================== 02 解释层 STA ===================== -->
+  <h2 id="sta"><span class="no">02</span>解释层：标签 IDF 画像（SteamTasteAtlas）</h2>
+  <p>画像侧要回答的问题是：<b>每款游戏、每位用户，可以用什么「标签语言」描述？</b>答案是一套可解释、可复算的 IDF 加权标签体系——它既是推荐结果的解释层，也是第二目标的度量来源。</p>
+
+  <h3>2.1 输入与规范化</h3>
+  <p>输入为 UCSD 公开历史数据集（Australian Steam users/items + Steam 游戏元数据，2026-10-08 下载），两份 gzip 源文件均记录字节数与 SHA256；使用 <code>ast.literal_eval</code> 安全解析后规范化为 JSONL。关键统计：</p>
+  <div class="kv">
+    <div><b>88,310</b><span>原始用户记录</span></div>
+    <div><b>71,504</b><span>有游戏库的用户</span></div>
+    <div><b>5,153,209</b><span>行为行（用户 × 游戏）</span></div>
+    <div><b>10,978</b><span>行为中出现的游戏</span></div>
+    <div><b>32,135 → 32,132</b><span>游戏记录 → 去重目录</span></div>
+    <div><b>31,970</b><span>带标签游戏（知识库）</span></div>
+    <div><b>339</b><span>原始标签种类</span></div>
+    <div><b>0 / 0</b><span>解析错误 / 无效用户</span></div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>源文件</th><th>字节数</th><th>SHA256（截断）</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">australian_users_items.json.gz</td><td class="num">74,035,391</td><td class="mono">0b329f79ddf450ab…a8d99</td></tr>
+        <tr><td class="mono">steam_games.json.gz</td><td class="num">2,740,516</td><td class="mono">717f4653a26585fec…740</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>2.2 数仓：HDFS + Spark + Hive</h3>
+  <p>规范化的 JSONL 进入本机伪分布式的 Hadoop 3.4.2（WSL2 NameNode + DataNode，<b>单机、replication = 1</b>，fsck 健康），由 Apache Spark 3.5.5 完成清洗 / join / explode / 窗口归一化，落成五张 Parquet 表，并用嵌入式 Hive 2.3.9 / Derby 持久化元数据（非独立 HiveServer2）。</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>表</th><th>规模（查询核对）</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">behaviors</td><td class="num">5,094,082 行 · 70,912 用户 · 5,045,724,159 分钟</td><td>真实行为：Steam ID × 游戏 × 累计时长</td></tr>
+        <tr><td class="mono">profiles</td><td class="num">8,192,822 行 · 67,894 用户</td><td>批量用户标签画像（按 32 个 hash 桶分区）</td></tr>
+        <tr><td class="mono">catalog</td><td class="num">32,132 行</td><td>去重游戏目录与标签</td></tr>
+        <tr><td class="mono">population_baseline</td><td class="num">337 行</td><td>群体标签基线（全量 70,912 用户平均贡献占比）</td></tr>
+        <tr><td class="mono">tag_pairs</td><td class="num">28,230 行</td><td>精确二标签共现统计（前端 4,942 对，其余供分析）</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul>
+    <li>全量画像计算：<b>355.903 秒</b>（local[2]），8,192,822 行结果写入 Parquet 并回读；</li>
+    <li>运行时用 <code>share</code> 不变量自检：按用户求和的偏差最大 <b>2.22e-15</b>（浮点级）；</li>
+    <li>数仓核对 SQL 例：行为/画像/目录计数、share 不变量、群体标签 Top10——7 条查询合计 40.5 秒完成；</li>
+    <li>HDFS 抽样文件 SHA256 往返比对一致（<span class="mono">750cfc96…f081e7</span>），验证存储读写完整性。</li>
+  </ul>
+
+  <h3>2.3 画像口径：IDF 加权与群体对照</h3>
+  <pre>IDF(t) = 1 + ln( (N + 1) / (df(t) + 1) )      N = 31,970（背景游戏总数）；df(t) = 标签出现频次</pre>
+  <ul>
+    <li><b>两档权重模式</b>：均衡模式按 ln(1 + 游玩小时) 分配行为质量；时长模式直接按小时——应用于推荐卡证据展示；</li>
+    <li><b>游戏内归一化</b>：标签先做 IDF 调整、再在同一款游戏内部归一，保证总贡献不随标签数量膨胀；历史库未收录的新标签取中性 <b>IDF = 1</b>；</li>
+    <li><b>用户侧口径</b>：同一用户各标签 <code>share</code> 总和恒为 1（可核对），<code>score</code> 以最强标签为 100；</li>
+    <li><b>群体对照</b>：分母为全部 70,912 位有行为记录的历史用户（未出现标签按零贡献），另存 67,894 位有效画像用户的均值与「仅在标签暴露用户中」的条件分位数——界面上三种口径不混用；</li>
+    <li><b>边界声明</b>：历史样本有地区 / 时间 / 可见性限制，不代表今天全体 Steam 用户；新旧标签未自动合并；元数据含少量非游戏条目。</li>
+  </ul>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>群体基线 Top 10（按平均贡献占比）</th><th>覆盖用户数</th><th>平均 share</th><th>群体基线 Top 10</th><th>覆盖用户数</th><th>平均 share</th></tr></thead>
+      <tbody>
+        <tr><td>Multiplayer</td><td class="num">67,528</td><td class="num">0.0339</td><td>First-Person</td><td class="num">65,893</td><td class="num">0.0251</td></tr>
+        <tr><td>Co-op</td><td class="num">66,982</td><td class="num">0.0330</td><td>Online Co-Op</td><td class="num">65,241</td><td class="num">0.0249</td></tr>
+        <tr><td>FPS</td><td class="num">66,142</td><td class="num">0.0275</td><td>Action</td><td class="num">67,721</td><td class="num">0.0202</td></tr>
+        <tr><td>Singleplayer</td><td class="num">66,784</td><td class="num">0.0269</td><td>Open World</td><td class="num">63,178</td><td class="num">0.0193</td></tr>
+        <tr><td>Shooter</td><td class="num">66,065</td><td class="num">0.0268</td><td>Moddable</td><td class="num">61,812</td><td class="num">0.0189</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">注：覆盖用户多 ≠ 平均占比高——占比同时受「多少人用过」与「每个人贡献多少」影响，这也是后续用 IDF 做区分度加权的原因。</p>
+
+  <h3>2.4 画像服务与流式链路</h3>
+  <ul>
+    <li><b>个人画像</b>：输入 Steam ID64 或主页链接 → 抓取当前可见游戏库（中文名优先）+ 公开商店元数据 → 生成个人画像；历史库为缺失元数据兜底；快照持久化后可离线回看；</li>
+    <li><b>双引擎</b>：Node.js 参考实现（与 Spark 口径核对），可选 Spark local[2] 加速；</li>
+    <li><b>流式更新</b>：累计时长快照事件（eventId / observedAt / 用户 / 游戏 / 分钟 / 标签）经 Kafka 解耦 → Flink 按用户过滤历史日志并重建状态（增量差分）→ Kafka → Redis 物化查询（按用户合并最新 revision、记录确认消费 offset，结果未变则拒绝重复写入）；</li>
+    <li><b>实测</b>：账号 HTTP 端到端更新 <b>36.255 秒</b>（其中 Spark 13.17 秒、流链路 17.248 秒）；Redis 查询抽样核对 260 个标签，最大误差 7.1e-15；</li>
+    <li><b>可复查</b>：Parquet 回读行数与画像字段 xxhash64 求和一致（概率性内容校验）；三位历史用户经独立 Python 核对，最大 rawScore 误差 8.88e-15；Node 参考口径与 Spark 结果做 Parquet 双向 exceptAll。</li>
+  </ul>
+  <p class="note">示例账号快照（2026-10 快照）：147 款游戏、104 款有时长、累计 1,647.8 小时、146 款带标签、时长标签覆盖 100%。</p>
+
+  <!-- ===================== 03 决策层 BDS ===================== -->
+  <h2 id="bds"><span class="no">03</span>决策层：NSGA-II 多目标推荐（bigdata_steam）</h2>
+  <p>推荐侧的问题：在保证「猜得准」的前提下，让推荐列表「推得广」。做法是把多样性做成第二目标，用多目标演化算法一次求出整条权衡前沿，再自动选取膝点。</p>
+
+  <h3>3.1 数据与建模矩阵</h3>
+  <ul>
+    <li>原始评论 <b>779.3 万条（1.24 GB）</b> → <b>6 步清洗</b> → 95.4 万条交互对；</li>
+    <li>建模矩阵：<b>112,707</b> 用户 × <b>6,489</b> 款游戏，非零元 <b>731,205</b> 条（密度 0.100%）；</li>
+    <li>特征：ALS 隐向量 <b>128 维</b>（隐式反馈）；标签侧为 STA 知识库的 337 种标签矩阵（6,489 × 337）；</li>
+    <li>评估：留一法（test_pairs.parquet），每用户在同一 top-300 候选池内比较，训练集交互在打分时置 −inf。</li>
+  </ul>
+
+  <h3>3.2 指标口径（两把尺子）</h3>
+  <pre>RelDCG@10 = mean( rel / log2( rank + 1 ) )          猜得准：训练交互置 −inf、min-max 归一后按位次折损
+ILD@10    = 1 − 2·triu(Vn·Vnᵀ,1).sum() / (K·(K−1))  推得广：列表内两两平均距离（行向量 L2 归一）
+第二目标   = (1 − w)·ALS-ILD + w·TAG-ILD              w 为唯一的模式变量（0 ~ 1 五档）
+膝点       = argmax( RelDCG × ILD )                  准确度 × 多样性乘积最大的点
+等准确度门槛 ρ = 0.90                                 各模式允许的准确度 ≥ 该用户 ALS Top-10 的 90%</pre>
+
+  <h3>3.3 实验设置（全程锁定）与优化管线</h3>
+  <div class="grid2">
+    <div class="panel"><h4>统一设置（可复现）</h4>
+      <ul>
+        <li>40 个演示用户：带固定随机种子的可复现抽样；</li>
+        <li>候选池：ALS 全域打分后逐用户截取 top-300；</li>
+        <li>演化参数：种群 150 × 60 代，全部实验一致；</li>
+        <li>随机种子：42（全局统一）；</li>
+        <li>唯一变量：相似度来源 w = 0 / 0.25 / 0.50 / 0.75 / 1。</li>
+      </ul>
+    </div>
+    <div class="panel"><h4>NSGA-II 管线</h4>
+      <ul>
+        <li>ALS 128 维隐向量 → 全域打分 → 每用户 top-300 候选池；</li>
+        <li>非支配排序 + 拥挤度保持，迭代 60 代；</li>
+        <li>一次运行得到整条帕累托前沿（五模式 1,476 ~ 2,582 个非支配解）；</li>
+        <li>膝点自动选取（argmax RelDCG × ILD），无需人工调档；</li>
+        <li>对照组：MMR 重排（α = 0.3 / 0.5 / 0.7）与纯 ALS 基线。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===================== 04 结果 ===================== -->
+  <h2 id="results"><span class="no">04</span>实验结果与群体结论</h2>
+
+  <h3>4.1 五模式对照（同一设置，40 用户平均）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>相似度模式（唯一变量）</th><th>膝点 RelDCG</th><th>膝点 TAG-ILD · 语义</th><th>膝点 ALS-ILD · 隐向量</th><th>合计增益 · ρ=0.90</th><th>命中 NDCG</th><th>前沿规模</th></tr></thead>
+      <tbody>
+        <tr><td>纯隐向量 w = 0</td><td class="num">0.3490</td><td class="num">0.7998</td><td class="num">0.9805</td><td class="num">+0.2247</td><td class="num">0.0286</td><td class="num">1,476</td></tr>
+        <tr><td>混合 w = 0.25</td><td class="num">0.3489</td><td class="num">0.8173</td><td class="num">0.9792</td><td class="num">+0.2490</td><td class="num">0.0214</td><td class="num">1,738</td></tr>
+        <tr><td>混合 w = 0.50（默认演示）</td><td class="num">0.3482</td><td class="num">0.8391</td><td class="num">0.9702</td><td class="num">+0.2571</td><td class="num">0.0125</td><td class="num">1,896</td></tr>
+        <tr><td>混合 w = 0.75</td><td class="num">0.3459</td><td class="num">0.8591</td><td class="num">0.9520</td><td class="num">+0.2574</td><td class="num">0.0125</td><td class="num">1,953</td></tr>
+        <tr><td>纯标签 IDF w = 1</td><td class="num">0.3425</td><td class="num">0.8765</td><td class="num">0.8670</td><td class="num">+0.2195</td><td class="num">0.0125</td><td class="num">2,582</td></tr>
+        <tr class="base"><td>基线：纯 ALS Top-10（未重排）</td><td class="num">0.3598</td><td class="num">0.7618</td><td class="num">0.8482</td><td class="num">—</td><td class="num">0.0125</td><td class="num">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul>
+    <li>膝点语义多样性随 w 单调上升（0.80 → 0.88）；纯标签端隐向量多样性回落明显（0.87）——完全丢掉隐向量有代价；</li>
+    <li>合计增益呈 <b>倒 U 形</b>，平台区 <b>[0.5, 0.75]</b>；各档膝点准确度稳定在 0.343 ~ 0.349；</li>
+    <li>注意基线行：纯 ALS 自己的语义多样性只有 <b>0.7618</b>，各档膝点都显著高于它——这就是协同带来的净增量；</li>
+    <li>命中 NDCG 差异在 3 ~ 4 个用户的噪声级，不构成命中代价（详见 4.2）。</li>
+  </ul>
+
+  <h3>4.2 群体结论（收口数字）</h3>
+  <div class="grid2">
+    <div class="panel"><h4>推得广 · ALS-ILD@10：+15.8%</h4>0.8482 → 0.9820（NSGA-II 膝点 vs 纯 ALS 基线，40 用户平均）。多样性提升覆盖了全部 40 位演示用户。</div>
+    <div class="panel"><h4>猜得准 · RelDCG@10：−3.1%</h4>0.3598 → 0.3486——这是准确度的全部代价；命中率差异在噪声级（各设置 3~4 / 40 用户），改善的是多样性质量与可解释性。</div>
+  </div>
+
+  <h3>4.3 权重扫描：为什么推荐 w = 0.5</h3>
+  <figure>
+    <svg viewBox="0 0 760 320" role="img" aria-label="权重扫描：合计增益随 w 呈倒 U 形，平台区 0.5 到 0.75">
+      <rect x="400" y="28" width="168" height="232" fill="#4c7c24" opacity="0.07"></rect>
+      <line x1="400" y1="28" x2="400" y2="260" stroke="#4c7c24" stroke-dasharray="4 4" opacity="0.45"></line>
+      <line x1="568" y1="28" x2="568" y2="260" stroke="#4c7c24" stroke-dasharray="4 4" opacity="0.45"></line>
+      <text x="484" y="20" text-anchor="middle" font-size="12" fill="#4c7c24">平台区 [0.5, 0.75]</text>
+      <text x="64" y="16" font-size="12" fill="#667052">合计增益（ρ=0.90，40 用户平均）</text>
+      <line x1="64" y1="237" x2="736" y2="237" stroke="#d1d7bd" stroke-dasharray="3 5"></line>
+      <line x1="64" y1="144" x2="736" y2="144" stroke="#d1d7bd" stroke-dasharray="3 5"></line>
+      <line x1="64" y1="51" x2="736" y2="51" stroke="#d1d7bd" stroke-dasharray="3 5"></line>
+      <text x="58" y="241" text-anchor="end" font-size="11" fill="#667052">0.22</text>
+      <text x="58" y="148" text-anchor="end" font-size="11" fill="#667052">0.24</text>
+      <text x="58" y="55" text-anchor="end" font-size="11" fill="#667052">0.26</text>
+      <line x1="64" y1="28" x2="64" y2="260" stroke="#d1d7bd"></line>
+      <line x1="64" y1="260" x2="736" y2="260" stroke="#d1d7bd"></line>
+      <line x1="64" y1="260" x2="64" y2="266" stroke="#d1d7bd"></line>
+      <line x1="232" y1="260" x2="232" y2="266" stroke="#d1d7bd"></line>
+      <line x1="400" y1="260" x2="400" y2="266" stroke="#d1d7bd"></line>
+      <line x1="568" y1="260" x2="568" y2="266" stroke="#d1d7bd"></line>
+      <line x1="736" y1="260" x2="736" y2="266" stroke="#d1d7bd"></line>
+      <text x="64" y="282" text-anchor="middle" font-size="11" fill="#667052">0</text>
+      <text x="232" y="282" text-anchor="middle" font-size="11" fill="#667052">0.25</text>
+      <text x="400" y="282" text-anchor="middle" font-size="11" fill="#667052">0.50</text>
+      <text x="568" y="282" text-anchor="middle" font-size="11" fill="#667052">0.75</text>
+      <text x="736" y="282" text-anchor="middle" font-size="11" fill="#667052">1.00</text>
+      <text x="400" y="306" text-anchor="middle" font-size="12" fill="#667052">相似度权重 w（标签成分占比）</text>
+      <polyline points="64,215 232,102 400,65 568,63 736,239" fill="none" stroke="#4c7c24" stroke-width="2.5"></polyline>
+      <circle cx="64" cy="215" r="4.5" fill="#fffffa" stroke="#4c7c24" stroke-width="2"></circle>
+      <circle cx="232" cy="102" r="4.5" fill="#fffffa" stroke="#4c7c24" stroke-width="2"></circle>
+      <circle cx="400" cy="65" r="4.5" fill="#fffffa" stroke="#4c7c24" stroke-width="2"></circle>
+      <circle cx="568" cy="63" r="4.5" fill="#fffffa" stroke="#4c7c24" stroke-width="2"></circle>
+      <circle cx="736" cy="239" r="4.5" fill="#fffffa" stroke="#4c7c24" stroke-width="2"></circle>
+      <text x="568" y="50" text-anchor="middle" font-size="11.5" fill="#416426">w=0.75 · +0.2574（最高）</text>
+      <text x="452" y="88" text-anchor="middle" font-size="11.5" fill="#416426">w=0.5 · +0.2571（差 0.0003）</text>
+      <text x="72" y="236" font-size="11.5" fill="#667052">纯隐向量端 +0.2247</text>
+      <text x="736" y="256" text-anchor="end" font-size="11.5" fill="#667052">纯标签端 +0.2195</text>
+    </svg>
+    <figcaption>图 A：相似度权重扫描——等准确度门槛 ρ=0.90 下多样性合计增益（40 用户平均，数据源 meta.json / sim_w_sweep.json）。合计增益呈倒 U 形：最高点 w=0.75（+0.2574），w=0.5 仅差 0.0003；跨门槛复检（ρ=0.85 / 0.95）w=0.5 两胜一负、唯一失利差 0.0003。</figcaption>
+  </figure>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>权重 w</th><th>语义尺子 TAG-ILD 增益</th><th>隐向量尺子 ALS-ILD 增益</th><th>合计</th></tr></thead>
+      <tbody>
+        <tr><td>0（纯隐向量）</td><td class="num">+0.0690</td><td class="num">+0.1557</td><td class="num">+0.2247</td></tr>
+        <tr><td>0.25</td><td class="num">+0.0952</td><td class="num">+0.1538</td><td class="num">+0.2490</td></tr>
+        <tr><td>0.50</td><td class="num">+0.1114</td><td class="num">+0.1456</td><td class="num">+0.2571</td></tr>
+        <tr><td>0.75</td><td class="num">+0.1303</td><td class="num">+0.1271</td><td class="num">+0.2574</td></tr>
+        <tr><td>1（纯标签）</td><td class="num">+0.1427</td><td class="num">+0.0768</td><td class="num">+0.2195</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><b>结论</b>：语义增益随 w 单调上升、隐向量增益单调下降，两者在 0.5 ~ 0.75 之间形成平台；另一条准确度线的推荐值（α = 0.5）同样落在 0.5——两条线统一收敛。<b>最终推荐 w = 0.5</b>：位于平台区内、等权、可解释。</p>
+
+  <h3>4.4 与基线和 MMR 的对照</h3>
+  <figure>
+    <svg viewBox="0 0 720 360" role="img" aria-label="前沿对照：NSGA-II 前沿、MMR 三档与 ALS 基线">
+      <line x1="56" y1="300" x2="704" y2="300" stroke="#d1d7bd" stroke-dasharray="3 5"></line>
+      <line x1="56" y1="217" x2="704" y2="217" stroke="#d1d7bd" stroke-dasharray="3 5"></line>
+      <line x1="56" y1="135" x2="704" y2="135" stroke="#d1d7bd" stroke-dasharray="3 5"></line>
+      <line x1="56" y1="53" x2="704" y2="53" stroke="#d1d7bd" stroke-dasharray="3 5"></line>
+      <text x="50" y="304" text-anchor="end" font-size="11" fill="#667052">0.85</text>
+      <text x="50" y="221" text-anchor="end" font-size="11" fill="#667052">0.90</text>
+      <text x="50" y="139" text-anchor="end" font-size="11" fill="#667052">0.95</text>
+      <text x="50" y="57" text-anchor="end" font-size="11" fill="#667052">1.00</text>
+      <line x1="56" y1="20" x2="56" y2="316" stroke="#d1d7bd"></line>
+      <line x1="56" y1="316" x2="704" y2="316" stroke="#d1d7bd"></line>
+      <text x="56" y="334" text-anchor="middle" font-size="11" fill="#667052">0.28</text>
+      <text x="380" y="334" text-anchor="middle" font-size="11" fill="#667052">0.32</text>
+      <text x="704" y="334" text-anchor="middle" font-size="11" fill="#667052">0.36</text>
+      <text x="380" y="354" text-anchor="middle" font-size="12" fill="#667052">RelDCG@10 · 猜得准 →</text>
+      <text x="20" y="170" text-anchor="middle" font-size="12" fill="#667052" transform="rotate(-90 20 170)">ILD@10 · 推得广 →</text>
+      <polyline points="113,22 272,29 310,32 338,35 387,40 442,49 484,58 542,72 593,97 651,144 702,303" fill="none" stroke="#4c7c24" stroke-width="2"></polyline>
+      <circle cx="113" cy="22" r="3.5" fill="#4c7c24"></circle>
+      <circle cx="272" cy="29" r="3.5" fill="#4c7c24"></circle>
+      <circle cx="310" cy="32" r="3.5" fill="#4c7c24"></circle>
+      <circle cx="338" cy="35" r="3.5" fill="#4c7c24"></circle>
+      <circle cx="387" cy="40" r="3.5" fill="#4c7c24"></circle>
+      <circle cx="442" cy="49" r="3.5" fill="#4c7c24"></circle>
+      <circle cx="484" cy="58" r="3.5" fill="#4c7c24"></circle>
+      <circle cx="542" cy="72" r="3.5" fill="#4c7c24"></circle>
+      <circle cx="593" cy="97" r="3.5" fill="#4c7c24"></circle>
+      <circle cx="651" cy="144" r="3.5" fill="#4c7c24"></circle>
+      <circle cx="702" cy="303" r="3.5" fill="#4c7c24"></circle>
+      <polyline points="386,52 520,70 628,118" fill="none" stroke="#c2aa20" stroke-width="2" stroke-dasharray="6 4"></polyline>
+      <circle cx="386" cy="52" r="3.5" fill="#c2aa20"></circle>
+      <circle cx="520" cy="70" r="3.5" fill="#c2aa20"></circle>
+      <circle cx="628" cy="118" r="3.5" fill="#c2aa20"></circle>
+      <text x="520" y="58" text-anchor="middle" font-size="11.5" fill="#a0891a">MMR 三档（α=0.3/0.5/0.7）</text>
+      <rect x="696" y="297" width="12" height="12" rx="2" fill="#35491e"></rect>
+      <text x="696" y="290" text-anchor="end" font-size="11.5" fill="#35491e">ALS 基线（0.3598, 0.8482）</text>
+      <circle cx="612" cy="82" r="7" fill="#fffffa" stroke="#35491e" stroke-width="2.5"></circle>
+      <circle cx="612" cy="82" r="2.5" fill="#35491e"></circle>
+      <text x="600" y="72" text-anchor="end" font-size="11.5" fill="#416426">膝点（0.3486, 0.9820）</text>
+    </svg>
+    <figcaption>图 B：40 用户平均前沿对照——NSGA-II（实线）一次给出整条前沿；MMR（虚线）三个档位均为单点、且都落在前沿下方；最右端为纯 ALS 基线（0.3598, 0.8482）；圈标为膝点（0.3486, 0.9820）。</figcaption>
+  </figure>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>方法</th><th>RelDCG@10</th><th>ILD@10</th><th>命中 NDCG</th><th>等准确度匹配对照（40 用户）</th></tr></thead>
+      <tbody>
+        <tr><td>纯 ALS 基线</td><td class="num">0.3598</td><td class="num">0.8482</td><td class="num">0.0125</td><td>对照原点</td></tr>
+        <tr><td>MMR α = 0.3</td><td class="num">0.3207</td><td class="num">1.0003</td><td class="num">0.0438</td><td class="mono">ILD 胜 39/40 · 增益 +0.0089</td></tr>
+        <tr><td>MMR α = 0.5</td><td class="num">0.3373</td><td class="num">0.9896</td><td class="num">0.0349</td><td class="mono">ILD 胜 34/40 · 增益 +0.0067</td></tr>
+        <tr><td>MMR α = 0.7</td><td class="num">0.3506</td><td class="num">0.9602</td><td class="num">0.0297</td><td class="mono">ILD 胜 32/40 · 增益 +0.0086</td></tr>
+        <tr><td>NSGA-II 膝点</td><td class="num">0.3486</td><td class="num">0.9820</td><td class="num">0.0222</td><td>前沿上自动选点（无需调档）</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">匹配对照为「等准确度匹配」：将 MMR 各档与 NSGA-II 前沿在相同准确度水平上比较 ILD 增益与逐用户胜负（数据源 comparison.json）。</p>
+
+  <h3>4.5 三个案例：把结论落到人身上（演示载体）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>案例</th><th>筛法（从 40 人分布）</th><th>ILD@10（基线 → 膝点）</th><th>RelDCG@10（基线 → 膝点）</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td>A · 用户 83090</td><td>多样性提升最大</td><td class="num">0.3881 → 0.9849（+0.597）</td><td class="num">2.5092 → 2.3305（−7.1%）</td><td>列表从集中在少数品类变为跨品类分布</td></tr>
+        <tr><td>B · 用户 60852</td><td>真实命中</td><td class="num">0.9198 → 0.9963</td><td class="num">3.4378 → 3.3653</td><td>留一测试项 The Binding of Isaac: Rebirth 在膝点列表第 3 位原位保留</td></tr>
+        <tr><td>C · 用户 79603</td><td>典型用户（贴近群体均值）</td><td class="num">0.9041 → 0.9811</td><td class="num">3.1190 → 3.0025（−3.7%）</td><td>方向与群体一致，幅度温和</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">案例不是随手挑的：按「ILD 增益最大 / 留一命中 / 贴近均值」三个口径从 40 人里筛出，仅作演示载体——所有结论仍以 40 用户平均为准。案例页可在推荐演示页切换查看。</p>
+
+  <!-- ===================== 05 融合层 ===================== -->
+  <h2 id="fusion"><span class="no">05</span>融合层：复算、校验与演示站（combination）</h2>
+  <p>融合侧的工作原则是「不重跑实验、但逐位复核」：从 BDS 的实验产物复算出前端所需的全部数据快照（web-data），并做三重校验后固化；页面数字与源实验逐位一致，稳定可复现。</p>
+
+  <h3>5.1 web-data：前端数据快照</h3>
+  <ul>
+    <li><span class="mono">meta.json</span>：群体指标、5 模式膝点与 ρ=0.90 增益、对照实验、16 项源文件 SHA256 指纹；</li>
+    <li><span class="mono">users.json / items.json</span>：40 位演示用户（画像 top 标签与案例标注）与 6,489 款游戏（名称 + 标签索引，100% 名称覆盖）；</li>
+    <li><span class="mono">reco/&lt;uid&gt;.json ×40</span>：每位用户 × 5 模式的完整推荐列表、帕累托前沿点、膝点与 ALS 基线对照。</li>
+  </ul>
+
+  <h3>5.2 三重校验（构建时逐项执行）</h3>
+  <div class="grid3">
+    <div class="panel"><h4>① 膝点复算</h4>膝点均值与源实验 sim_w_sweep.json <b>逐位一致</b>（差 0.00e+00）；第二目标逐点复算最大偏差 <b>5e-06</b>。</div>
+    <div class="panel"><h4>② 基线对照</h4>ALS Top-10 指标与 BDS 记录差 ≤ <b>5e-05</b>（浮点显示级）。</div>
+    <div class="panel"><h4>③ 覆盖率</h4>6,489 / 6,489 款游戏名称 <b>100% 覆盖</b>；标签库命中 100%。</div>
+  </div>
+
+  <h3>5.3 演示站功能与部署</h3>
+  <ul>
+    <li><b>画像页 <span class="mono">/</span></b>：标签图谱（圆面积 ∝ score，点击节点查游戏证据）、证据面板、时长图（条形 ∝ 小时）、快照离线回看；</li>
+    <li><b>推荐演示页 <span class="mono">/reco.html</span></b>：5 模式标签页、帕累托散点图（纵轴可切换 ALS-ILD / TAG-ILD，膝点高亮可点选）、10 张推荐卡（高亮 = 与画像重合标签、✓ = 留一命中、每卡附 ALS 基线对照）、膝点对比条、三个案例用户切换；</li>
+    <li><b>本报告页 <span class="mono">/report.html</span></b>：自包含 HTML——无脚本、无外链、内联图表，可离线打开、可打印为 PDF（服务端对其施加最严格 CSP）；</li>
+    <li><b>数据接口</b>：<span class="mono">/api/reco/meta.json · users.json · items.json · user/&lt;id&gt;.json</span>；大数据运行记录 <span class="mono">/api/big-data</span>；Redis 实际画像 <span class="mono">/api/stream-profiles/&lt;SteamID64&gt;</span>；探活 <span class="mono">/healthz</span>；</li>
+    <li><b>部署形态</b>：内置 Node 运行时（<span class="mono">tools\windows-node\node.exe</span>），无需安装任何环境、断网可用；公网演示模式（独立端口 4320 + Cloudflare Quick Tunnel，隧道二进制经 SHA256 与官方数字签名双重校验）供其他设备访问。</li>
+  </ul>
+
+  <h3>5.4 工程约定</h3>
+  <ul>
+    <li><b>两源项目零改动</b>：数据以只读快照导入，源仓库不写一个字节；</li>
+    <li><b>融合侧独立可运行</b>：web-data 已固化，站点纯静态 + 本机服务；</li>
+    <li><b>一键启动</b>：双击 <span class="mono">启动演示.cmd</span>（healthz 探活就绪后再自动开浏览器；保持命令行窗口开启即持续服务）；</li>
+    <li><b>汇报材料</b>：<span class="mono">tools\build_report_ppt.py</span> 一键生成 17 页汇报 PPT（含逐页讲稿与时控），与本站数字同源。</li>
+  </ul>
+
+  <!-- ===================== 06 可复查产物 ===================== -->
+  <h2 id="artifacts"><span class="no">06</span>可复查产物与复现</h2>
+
+  <h3>6.1 推荐侧（BDS）源文件指纹</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>文件</th><th>作用</th><th>SHA256（前 8 位）</th><th>文件</th><th>作用</th><th>SHA256（前 8 位）</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">nsga2_sim_als.json</td><td>模式 w=0 逐用户前沿与膝点</td><td class="mono">b281ab57</td><td class="mono">sim_w_sweep.json</td><td>权重扫描（ρ=0.90 增益）</td><td class="mono">ccc83627</td></tr>
+        <tr><td class="mono">nsga2_sim_w025.json</td><td>模式 w=0.25</td><td class="mono">5cc59d89</td><td class="mono">user_cases.json</td><td>三案例列表与指标</td><td class="mono">6978c288</td></tr>
+        <tr><td class="mono">nsga2_sim_hybrid.json</td><td>模式 w=0.50（默认）</td><td class="mono">dda07cfa</td><td class="mono">comparison.json</td><td>ALS / MMR / NSGA-II 对照</td><td class="mono">6623fc65</td></tr>
+        <tr><td class="mono">nsga2_sim_w075.json</td><td>模式 w=0.75</td><td class="mono">02dd5648</td><td class="mono">item_map.csv · user_map.csv</td><td>内外 ID 映射</td><td class="mono">4c951da7 · bcbb3851</td></tr>
+        <tr><td class="mono">nsga2_sim_tag.json</td><td>模式 w=1 逐用户前沿与膝点</td><td class="mono">7d4712b5</td><td class="mono">tag_meta.json</td><td>337 标签元数据</td><td class="mono">3538e4cb</td></tr>
+        <tr><td class="mono">train_ui.npz</td><td>训练交互矩阵</td><td class="mono">3d577a86</td><td class="mono">test_pairs.parquet</td><td>留一测试对</td><td class="mono">377e2ef3</td></tr>
+        <tr><td class="mono">als_user_factors.npy</td><td>ALS 128 维用户隐向量</td><td class="mono">0bd0fb24</td><td class="mono">als_item_factors.npy</td><td>ALS 128 维游戏隐向量</td><td class="mono">9517f484</td></tr>
+        <tr><td class="mono">tag_item_matrix.npy</td><td>标签-游戏矩阵（6489 × 337，L2 归一）</td><td class="mono">1602d374</td><td class="mono">—</td><td>共 16 项快照，全记录于 meta.json provenance</td><td class="mono">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>6.2 画像侧（STA）可复查产物</h3>
+  <ul>
+    <li><span class="mono">data/public-steam/manifest.json</span>：来源 URL、下载 SHA256、规范化统计；</li>
+    <li><span class="mono">data/public-steam/results/run.json</span>：全量 Spark 规模、耗时、覆盖率与核验记录；</li>
+    <li><span class="mono">data/public-steam/results/profiles.parquet/</span>：8,192,822 行完整画像（按需读取，不全部收集到 driver）；</li>
+    <li><span class="mono">data/public-steam/baseline.json</span>：供本机应用消费的频率、关联与群体统计；</li>
+    <li><span class="mono">docs/warehouse-verification.json</span>：HDFS / Hive / Spark SQL 核对结果（本报告 2.2 节数据来源）。</li>
+  </ul>
+
+  <h3>6.3 复现步骤</h3>
+  <pre># ① 演示站（融合侧，本机离线）
+双击  启动演示.cmd            # 端口 4319；就绪后自动打开浏览器
+# 或命令行： tools\windows-node\node.exe server.mjs
+
+# ② 重建 web-data 快照（融合侧，需 BDS 的 venv Python）
+用 BDS venv Python 运行   tools\build_reco_data.py     # 复算 + 三重校验
+
+# ③ 公网演示（其他设备，独立端口 4320 + Cloudflare 隧道）
+双击  启动演示-公网.cmd        # 窗口内出现 https://xxxx.trycloudflare.com 即可访问
+
+# ④ 画像侧（STA）自身复现
+npm test                                    # Node 参考实现验证
+# 全量管线：pipeline/PUBLIC_STEAM.md；流处理：pipeline/STREAM-RUNTIME.md；数仓：pipeline/warehouse_README.md
+# 单用户重算：node scripts/rebuild-snapshot.mjs &lt;SteamID64&gt;
+
+# ⑤ 本报告与 PPT
+# 本页为自包含 HTML（离线可打开、可打印 PDF）；PPT 由 tools\build_report_ppt.py 生成</pre>
+
+  <!-- ===================== 07 局限与展望 ===================== -->
+  <h2 id="limits"><span class="no">07</span>局限与展望</h2>
+  <div class="grid2">
+    <div class="panel"><h4>诚实边界</h4>
+      <ul>
+        <li><b>画像侧</b>：单机伪分布式（replication 1），非多节点集群、不构成容灾承诺；历史下载数据有地区 / 时间 / 可见性限制，不代表当前 Steam 人口；新旧标签未自动合并；元数据含少量非游戏条目；</li>
+        <li><b>推荐侧</b>：结论基于 40 个演示用户与单一随机种子（42），未做多种子重复与显著性检验；ILD 是「列表内两两平均」的代理指标，指标改善不等于体验改善；</li>
+        <li><b>案例层</b>：个体收益因人而异（A 让 7.1% 准确度、C 让 3.7%、B 保命中）——群体结论稳定，个案只是注脚。</li>
+      </ul>
+    </div>
+    <div class="panel"><h4>下一步计划</h4>
+      <ul>
+        <li>补多种子重复实验与显著性检验，给出置信区间而非单点均值；</li>
+        <li>从 40 个演示用户扩展到全量 11.2 万用户验证规模稳定性；</li>
+        <li>引入第三个优化目标（如新颖性 / 覆盖率），观察三维前沿；</li>
+        <li>画像侧持续推进流式链路与增量快照的长期运行验证。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>华中科技大学 · 大数据导论 · 课程设计 —— Steam 推荐系统 × 用户标签画像 协同工程</span>
+    <span>数据快照：STA 2026-10-08 / BDS 实验 2026-10-10 · 本页自包含（离线可用、可打印 PDF） · <a href="/">画像页</a> · <a href="/reco.html">推荐演示</a></span>
+  </div>
+</main>
+</body>
+</html>

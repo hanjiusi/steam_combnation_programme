@@ -1,0 +1,81 @@
+{
+  "engine": "Apache Spark 3.5.5",
+  "master": "local[2]",
+  "partitions": 8,
+  "hashBuckets": 32,
+  "driverMemory": "512 MB",
+  "weightMode": "balanced",
+  "inputBehaviorRows": 5153209,
+  "deduplicatedBehaviorRows": 5094082,
+  "duplicateRows": 59127,
+  "behaviorUsers": 70912,
+  "catalogGames": 32132,
+  "taggedCatalogGames": 31970,
+  "distinctTags": 339,
+  "profiledUsers": 67894,
+  "profileTagRows": 8192822,
+  "exactPairRows": 28230,
+  "selectedRelationPairs": 4942,
+  "fpGrowthItemsets": 12,
+  "fpGrowthMinSupport": 0.15,
+  "coverage": {
+    "behaviorRows": 5094082,
+    "taggedBehaviorRows": 4244696,
+    "playedBehaviorRows": 3246352,
+    "taggedPlayedRows": 2833953,
+    "totalMinutes": 5045724159,
+    "taggedMinutes": 4462205704
+  },
+  "parquetVerification": {
+    "method": "Full row count + decimal sum of xxhash64 of all profile fields; probabilistic checksum, not exact exceptAll comparison",
+    "inputFingerprint": {
+      "rows": 8192822,
+      "rowHashSum": "-20375733280762557475893",
+      "rawScoreSum": 5069488.932091886
+    },
+    "readbackFingerprint": {
+      "rows": 8192822,
+      "rowHashSum": "-20375733280762557475893",
+      "rawScoreSum": 5069488.93209175
+    }
+  },
+  "independentUserChecks": [
+    {
+      "steamid": "76561197960269200",
+      "games": 384,
+      "tags": 264,
+      "maxRawScoreError": 3.552713678800501e-15
+    },
+    {
+      "steamid": "76561197960270504",
+      "games": 209,
+      "tags": 225,
+      "maxRawScoreError": 8.881784197001252e-15
+    },
+    {
+      "steamid": "76561197960270742",
+      "games": 36,
+      "tags": 61,
+      "maxRawScoreError": 2.220446049250313e-16
+    }
+  ],
+  "stageSeconds": {
+    "input-count": 6.337,
+    "deduplicate-and-write-behaviors": 30.721,
+    "deduplicated-count": 0.383,
+    "distinct-users": 1.425,
+    "write-catalog": 0.605,
+    "coverage": 1.18,
+    "calculate-and-write-profiles": 230.628,
+    "profile-rows": 2.49,
+    "profiled-users": 2.55,
+    "input-fingerprint": 4.884,
+    "parquet-readback-fingerprint": 3.766,
+    "write-baseline": 21.72,
+    "write-exact-tag-pairs": 1.107,
+    "fpgrowth": 7.693
+  },
+  "elapsedSeconds": 355.903,
+  "scope": "Entire downloaded historical datasets, local[2] single-machine execution; not cluster performance",
+  "noSyntheticExpansion": true
+}
