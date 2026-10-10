@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="lemonade">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f5f9e8"><meta name="description" content="画像与推荐协同演示：比较 ALS 隐向量与标签 IDF 相似度下的多目标推荐前沿。">
+  <title>推荐实验室 · 画像 × 推荐协同</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="lemonade-components.css"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reco.css">
+  <script src="reco.js" type="module"></script>
+  <script>if(window.self!==window.top)document.documentElement.classList.add('embedded');</script>
+  <style>.embedded .site-header{display:none}</style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header wrap">
+    <nav class="header-nav" aria-label="页面导航"><a href="./#profile">画像</a><a href="./" class="current">推荐演示</a><a href="report.html">项目报告</a></nav>
+    <div class="header-meta"><span id="reco-status">正在检查实验数据</span></div>
+  </header>
+  <main class="wrap" id="main">
+    <section class="intro" aria-labelledby="intro-title">
+      <div class="intro-copy">
+        <div><p class="eyebrow">STA × BDS 协同</p><h1 id="intro-title">推荐实验室</h1></div>
+        <p class="intro-description">同一批 Steam 用户：标签 IDF 画像（本项目）<br>× NSGA-II 多目标推荐（协同项目）。<br>切换相似度模式，观察「猜得准」与「看得宽」的取舍。</p>
+      </div>
+    </section>
+
+    <section id="error-panel" class="error-panel" hidden role="alert"><span aria-hidden="true">!</span><div><strong id="error-title">推荐数据加载失败</strong><p id="error-message"></p></div></section>
+
+    <section class="panel card controls-card" aria-label="演示控制">
+      <div class="control-grid">
+        <div><label class="control-label" for="user-select">演示用户</label><select id="user-select" class="select" aria-label="选择演示用户"></select></div>
+        <div><span class="control-label" id="mode-label">相似度模式（标签成分 w）</span><div id="mode-tabs" class="filter-tabs" role="tablist" aria-labelledby="mode-label"></div></div>
+      </div>
+      <div id="case-banner" class="scope-banner" hidden aria-live="polite"><strong id="case-title"></strong><p id="case-message"></p></div>
+    </section>
+
+    <div class="reco-grid">
+      <section class="panel card" aria-labelledby="pareto-title">
+        <div class="section-heading">
+          <div><h2 id="pareto-title">帕累托前沿</h2><p id="pareto-caption">每个点是一条 Top-10 列表。</p></div>
+          <div class="yaxis-toggle" role="group" aria-label="纵轴指标">
+            <button type="button" class="filter-tab yaxis" data-axis="als">纵轴 · ALS-ILD</button>
+            <button type="button" class="filter-tab yaxis" data-axis="tag">纵轴 · TAG-ILD</button>
+          </div>
+        </div>
+        <div class="pareto-wrap"><svg id="pareto-svg" viewBox="0 0 900 430" role="img" aria-label="帕累托前沿散点图：横轴 RelDCG，纵轴 ILD"></svg></div>
+        <div class="pareto-actions"><span id="pareto-count"></span><button type="button" class="btn btn-sm btn-ghost text-button" id="knee-btn">回到膝点</button></div>
+        <p class="graph-footnote" id="pareto-footnote"></p>
+      </section>
+
+      <aside class="panel card user-panel" aria-labelledby="user-title">
+        <p class="eyebrow">标签画像</p>
+        <h2 id="user-title">…</h2>
+        <p id="user-meta"></p>
+        <p class="evidence-label">画像 Top 标签（IDF 加权）</p>
+        <div id="top-tags" class="chips"></div>
+        <p class="evidence-label">本轮留一测试物品（仅评估用，不参与打分）</p>
+        <div id="test-truth"></div>
+        <p class="evidence-label">当前选中列表的指标</p>
+        <div id="point-metrics" class="point-metrics"></div>
+      </aside>
+    </div>
+
+    <section class="panel card" aria-labelledby="cards-title">
+      <div class="section-heading">
+        <div><h2 id="cards-title">Top-10 推荐</h2><p id="cards-caption"></p></div>
+        <div class="graph-key"><span><i class="key-dot" style="background:#e3f0cd;border-color:#9cb167"></i>与画像标签重合</span><span><i class="key-dot" style="background:#e2efd0;border-color:#a9bf72"></i>命中留一测试</span></div>
+      </div>
+      <div id="reco-cards" class="reco-cards"></div>
+      <div class="baseline-row" id="baseline-row">
+        <div class="baseline-head"><b>对照 · ALS 基线 Top-10</b><span id="baseline-metrics"></span></div>
+        <div id="baseline-list" class="baseline-list"></div>
+      </div>
+    </section>
+
+    <section class="panel card" aria-labelledby="knee-title">
+      <div class="section-heading"><div><h2 id="knee-title">5 种模式的膝点对比</h2><p>全体 40 用户膝点均值 · 同一候选池 · 两把尺子同测</p></div></div>
+      <div class="knee-bars" id="knee-bars"></div>
+      <p class="dimension-note" id="knee-note"></p>
+    </section>
+
+    <section class="method-panel">
+      <h2>实验口径</h2>
+      <details><summary>指标定义、数据来源与校验</summary><div id="method-details"></div></details>
+    </section>
+  </main>
+  <footer class="site-footer wrap"><span>公开静态演示 · 数据取自离线实验快照</span><span>画像：Steam Taste Atlas（标签 IDF） · 推荐：bigdata_steam（NSGA-II）</span></footer>
+</body>
+</html>
